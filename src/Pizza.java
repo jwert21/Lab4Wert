@@ -35,28 +35,28 @@ public class Pizza {
         pizzas.add(new Pizza("Bob", "1002", "History"));
 
         // Write students to a flat file
-        try (PrintWriter writer = new PrintWriter(new FileWriter("students.txt"))) {
-            for (Student student : students) {
-                writer.println(student.toFixedFormatString());
+        try (PrintWriter writer = new PrintWriter(new FileWriter("pizzas.txt"))) {
+            for (Pizza pizza : pizzas) {
+                writer.println(pizza.toFixedFormatString());
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Read students from the flat file
-        List<Student> loadedStudents = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("students.txt"))) {
+        List<Pizza> loadedPizzas = new ArrayList<>();
+        try (BufferedReader reader = new BufferedReader(new FileReader("pizzas.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                loadedStudents.add(Student.fromFixedFormatString(line));
+                loadedPizzas.add(Pizza.fromFixedFormatString(line));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         // Display loaded students
-        for (Student student : loadedStudents) {
-            System.out.println("Name: " + student.name + ", ID: " + student.id + ", Course: " + student.course);
+        for (Pizza pizza : loadedPizzas) {
+            System.out.println("Name: " + pizza.name + ", ID: " + pizza.id + ", Course: " + pizza.course);
         }
     }
 }
