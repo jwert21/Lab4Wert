@@ -5,6 +5,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WebServiceReceive {
+}
 
     public static void main(String[] args) {
         try {
