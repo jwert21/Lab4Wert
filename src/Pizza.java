@@ -29,7 +29,6 @@ public class Pizza {
     }
 
     public static void main(String[] args) {
-        // Example data
         List<Pizza> pizza = new ArrayList<>();
         pizzas.add(new Pizza("Pepperoni", "1", "Neapolitan"));
         pizzas.add(new Pizza("Cheese", "2", "New York-Style"));
@@ -37,7 +36,6 @@ public class Pizza {
         pizzas.add(new Pizza("Vegetable", "4", "Focaccia"));
         pizzas.add(new Pizza("Mushroom", "5", "New York-Style"));
 
-        // Write students to a flat file
         try (PrintWriter writer = new PrintWriter(new FileWriter("pizzas.txt"))) {
             for (Pizza pizza : pizzas) {
                 writer.println(pizza.toFixedFormatString());
@@ -46,7 +44,6 @@ public class Pizza {
             e.printStackTrace();
         }
 
-        // Read students from the flat file
         List<Pizza> loadedPizzas = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader("pizzas.txt"))) {
             String line;
@@ -57,7 +54,6 @@ public class Pizza {
             e.printStackTrace();
         }
 
-        // Display loaded students
         for (Pizza pizza : loadedPizzas) {
             System.out.println("Name: " + pizza.type + ", ID: " + pizza.id + ", Crust: " + pizza.crust);
         }
