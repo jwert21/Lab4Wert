@@ -5,7 +5,7 @@ import com.rabbitmq.client.DeliverCallback;
 
 public class RabbitMQReceive {
 
-    private final static String QUEUE_NAME = "hello";
+    private final static String QUEUE_NAME = "Hello!";
 
     public static void main(String[] argv) throws Exception {
         ConnectionFactory factory = new ConnectionFactory();
