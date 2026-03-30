@@ -1,3 +1,13 @@
+/** Project: Lab 4
+ * Purpose Details:
+ * Course: IST 242
+ * Author: Jonah Wert
+ * Date Developed: 3/27/2026
+ * Last Date Changed: 3/30/2026
+ * Rev: 3/30/2026
+
+ */
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
