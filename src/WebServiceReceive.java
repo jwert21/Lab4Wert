@@ -1,50 +1,29 @@
-import java.io.BufferedReader;
+package main;
+
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
 
 public class WebServiceReceive {
-}
+    public static void main(String[] args) throws Exception {
+        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        server.createContext("/hello", new MyHandler());
+        server.setExecutor(null); // creates a default executor
+        server.start();
+    }
 
-    public static void main(String[] args) {
-        try {
-            // Specify the URL of the web service
-            String url = "http://localhost:8000/hello";
-
-            // Create a URL object
-            URL obj = new URL(url);
-
-            // Open a connection to the URL
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-            // Set the request method
-            con.setRequestMethod("GET");
-
-            // Set request headers if needed
-            // con.setRequestProperty("Content-Type", "application/json");
-
-            // Get the response code
-            int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
-
-            // Read the response from the web service
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            // Print the response
-            System.out.println("Response: " + response.toString());
-
-            // Parse the JSON response as needed
-
-        } catch (IOException e) {
-            e.printStackTrace();
+    static class MyHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            String response = "Hello from Java HTTP Server";
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
         }
     }
 }
