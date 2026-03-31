@@ -36,6 +36,12 @@ public class Pizza {
         pizzas.add(new Pizza("Vegetable", "4", "Focaccia", "Large"));
         pizzas.add(new Pizza("Mushroom", "5", "New York-Style", "Jumbo Large"));
 
+        Gson gson = new Gson();
+        String json = gson.toJson(pizzas);
+
+        System.out.println(json);
+        Pizza pizza = gson.fromJson(json, Pizza.class);
+
         try (PrintWriter writer = new PrintWriter(new FileWriter("pizzas.txt"))) {
             for (Pizza pizza : pizzas) {
                 writer.println(pizza.toFixedFormatString());

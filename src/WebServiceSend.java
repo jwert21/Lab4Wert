@@ -11,57 +11,67 @@
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import com.google.gson.Gson;
 
 public class WebServiceSend {
 
     public static void main(String[] args) {
         try {
-            String url = "http://localhost:8000/hello";
-            URL obj = new URL(url);
+            // URL of your server
+            URL url = new URL("http://localhost:8000/hello");
 
-            HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+            // Open connection
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
-            // Change to POST
+            // Set POST method
             con.setRequestMethod("POST");
 
-            // Enable sending data
+            // Allow sending body
             con.setDoOutput(true);
 
             // Set headers
-            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
 
             // Create Pizza object
-            Pizza pizza = new Pizza("Large", "Pepperoni", 2);
+            Pizza pizza = new Pizza("Pepperoni", "1", "Neapolitan", "Large");
 
-            // Convert Pizza to JSON (manual way)
-            String jsonInput = "{"
-                    + "\"size\":\"" + pizza.getSize() + "\","
-                    + "\"topping\":\"" + pizza.getTopping() + "\","
-                    + "\"quantity\":" + pizza.getQuantity()
-                    + "}";
+            // Convert Pizza → JSON
+            Gson gson = new Gson();
+            String jsonInput = gson.toJson(pizza);
 
-            // Send JSON
+            System.out.println("Sending JSON: " + jsonInput);
+
+            // Send JSON to server
             try (OutputStream os = con.getOutputStream()) {
                 byte[] input = jsonInput.getBytes("utf-8");
                 os.write(input, 0, input.length);
             }
 
+            // Get response code
             int responseCode = con.getResponseCode();
             System.out.println("Response Code: " + responseCode);
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream(), "utf-8"));
+            // Read response
+            BufferedReader br;
+            if (responseCode >= 200 && responseCode < 300) {
+                br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+            } else {
+                br = new BufferedReader(new InputStreamReader(con.getErrorStream(), "utf-8"));
+            }
+
             StringBuilder response = new StringBuilder();
             String line;
 
-            while ((line = in.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 response.append(line.trim());
             }
-            in.close();
+
+            br.close();
 
             System.out.println("Response: " + response.toString());
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
