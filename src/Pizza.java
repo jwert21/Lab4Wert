@@ -3,22 +3,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pizza {
-}
+    private String type;
+    private String id;
+    private String crust;
+    private String size;
 
-    public static class Pizza {
-        private String type;
-        private String id;
-        private String crust;
-        private String size;
+    public Pizza(String type, String id, String crust, String size) {
+        this.type = type;
+        this.id = id;
+        this.crust = crust;
+        this.size = size;
+    }
 
-        public Pizza(String type, String id, String crust, String size) {
-            this.type = type;
-            this.id = id;
-            this.crust = crust;
-            this.size = size;
-        }
-
-        public String toFixedFormatString() {
+    public String toFixedFormatString() {
             return String.format("%-10s%-10s%-20s", type, id, crust, size);
         }
 
@@ -58,8 +55,13 @@ public class Pizza {
         }
 
         for (Pizza pizza : loadedPizzas) {
-            System.out.println("Type: " + pizza.type + ", ID: " + pizza.id + ", Crust: " + pizza.crust);
+            System.out.println("Type: " + pizza.type + ", ID: " + pizza.id + ", Crust: " + pizza.crust + ", Size: " + pizza.size);
         }
+
+        public String getType() { return type; }
+        public String getId() { return id; }
+        public String getCrust() { return crust; }
+        public String getSize() { return size; }
     }
 }
 

@@ -8,50 +8,58 @@
 
  */
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class WebServiceSend {
-}
 
     public static void main(String[] args) {
         try {
-            // Specify the URL of the web service
             String url = "http://localhost:8000/hello";
-
-            // Create a URL object
             URL obj = new URL(url);
 
-            // Open a connection to the URL
             HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
-            // Set the request method
-            con.setRequestMethod("GET");
+            // Change to POST
+            con.setRequestMethod("POST");
 
-            // Set request headers if needed
-            // con.setRequestProperty("Content-Type", "application/json");
+            // Enable sending data
+            con.setDoOutput(true);
 
-            // Get the response code
+            // Set headers
+            con.setRequestProperty("Content-Type", "application/json");
+
+            // Create Pizza object
+            Pizza pizza = new Pizza("Large", "Pepperoni", 2);
+
+            // Convert Pizza to JSON (manual way)
+            String jsonInput = "{"
+                    + "\"size\":\"" + pizza.getSize() + "\","
+                    + "\"topping\":\"" + pizza.getTopping() + "\","
+                    + "\"quantity\":" + pizza.getQuantity()
+                    + "}";
+
+            // Send JSON
+            try (OutputStream os = con.getOutputStream()) {
+                byte[] input = jsonInput.getBytes("utf-8");
+                os.write(input, 0, input.length);
+            }
+
             int responseCode = con.getResponseCode();
-            System.out.println("Response Code : " + responseCode);
+            System.out.println("Response Code: " + responseCode);
 
-            // Read the response from the web service
-            BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String inputLine;
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream(), "utf-8"));
             StringBuilder response = new StringBuilder();
+            String line;
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
+            while ((line = in.readLine()) != null) {
+                response.append(line.trim());
             }
             in.close();
 
-            // Print the response
             System.out.println("Response: " + response.toString());
-
-            // Parse the JSON response as needed
 
         } catch (IOException e) {
             e.printStackTrace();
