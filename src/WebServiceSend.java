@@ -44,7 +44,7 @@ public class WebServiceSend {
 
             // Send JSON to server
             try (OutputStream os = con.getOutputStream()) {
-                byte[] input = jsonInput.getBytes("utf-8");
+                byte[] input = jsonInput.getBytes("UTF-8");
                 os.write(input, 0, input.length);
             }
 
