@@ -18,7 +18,7 @@ public class WebServiceSend {
     public static void main(String[] args) {
         try {
             // URL of your server
-            URL url = new URL("http://localhost:8000/hello");
+            URL url = new URL("http://localhost:8000/pizzashop");
 
             // Open connection
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
