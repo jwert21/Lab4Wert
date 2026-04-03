@@ -1,13 +1,21 @@
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+/** Project: Lab 4
+ * Purpose Details:
+ * Course: IST 242
+ * Author: Jonah Wert
+ * Date Developed: 3/27/2026
+ * Last Date Changed: 3/30/2026
+ * Rev: 3/30/2026
+
+ */
 
 public class Pizza {
+
     private String type;
     private String id;
     private String crust;
     private String size;
 
+    // Constructor
     public Pizza(String type, String id, String crust, String size) {
         this.type = type;
         this.id = id;
@@ -15,48 +23,67 @@ public class Pizza {
         this.size = size;
     }
 
-    public String toFixedFormatString() {
-            return String.format("%-10s%-10s%-20s%-40s", type, id, crust, size);
-        }
+    // Default constructor
+    public Pizza() {}
 
-        public static Pizza fromFixedFormatString(String line) {
-            String type = line.substring(0, 10).trim();
-            String id = line.substring(10, 20).trim();
-            String crust = line.substring(20, 40).trim();
-            String size = line.length() >= 80 ? line.substring(40, 80).trim() : line.substring(40).trim();
-            return new Pizza(type, id, crust, size);
-        }
+    // Getters and Setters
+    public String getType() {
+        return type;
     }
 
-    public static void main(String[] args) {
-        List<Pizza> pizzas = new ArrayList<>();
-        pizzas.add(new Pizza("Pepperoni", "1", "Neapolitan", "Personal"));
-        pizzas.add(new Pizza("Cheese", "2", "New York-Style", "Small"));
-        pizzas.add(new Pizza("Sausage", "3", "Sicilian", "Medium"));
-        pizzas.add(new Pizza("Vegetable", "4", "Focaccia", "Large"));
-        pizzas.add(new Pizza("Mushroom", "5", "New York-Style", "Jumbo Large"));
+    public void setType(String type) {
+        this.type = type;
+    }
 
-        try (PrintWriter writer = new PrintWriter(new FileWriter("pizzas.txt"))) {
-            for (Pizza pizza : pizzas) {
-                writer.println(pizza.toFixedFormatString());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public String getId() {
+        return id;
+    }
 
-        List<Pizza> loadedPizzas = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader("pizzas.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                loadedPizzas.add(Pizza.fromFixedFormatString(line));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-        for (Pizza pizza : loadedPizzas) {
-            System.out.println("Type: " + pizza.type + ", ID: " + pizza.id + ", Crust: " + pizza.crust + ", Size: " + pizza.size);
-        }
+    public String getCrust() {
+        return crust;
+    }
+
+    public void setCrust(String crust) {
+        this.crust = crust;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
+    // Convert to fixed-width flat file string
+    public String toFixedFormatString() {
+        return String.format("%-10s%-10s%-20s%-40s",
+                type, id, crust, size);
+    }
+
+    // Convert from fixed-width string
+    public static Pizza fromFixedFormatString(String line) {
+        String type = line.substring(0, 10).trim();
+        String id = line.substring(10, 20).trim();
+        String crust = line.substring(20, 40).trim();
+        String size = line.length() >= 80
+                ? line.substring(40, 80).trim()
+                : line.substring(40).trim();
+
+        return new Pizza(type, id, crust, size);
+    }
+
+    @Override
+    public String toString() {
+        return "Pizza{" +
+                "type='" + type + '\'' +
+                ", id='" + id + '\'' +
+                ", crust='" + crust + '\'' +
+                ", size='" + size + '\'' +
+                '}';
     }
 }
-
