@@ -8,23 +8,43 @@
 
  */
 
-import com.rabbitmq.client.ConnectionFactory;
-import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 
 public class RabbitMQSend {
-}
-    private final static String QUEUE_NAME = "Hello!";
+
+    private static final String QUEUE_NAME = "pizzashop_queue";
+
     public static void main(String[] argv) throws Exception {
+
+        //creates pizza object
+        Pizza pizza = new Pizza("Pepperoni", "1", "Thin Crust", "Large");
+
+        // Convert to fixed flat file format using method in pizza class
+        String message = pizza.toFixedFormatString();
+
+        //Write to pizzaFlatFile.txt (fixed flat file)
+        try (PrintWriter writer = new PrintWriter(new FileWriter("pizzaFlatFile.txt"))) {
+            writer.println(message);
+        }
+
+        System.out.println("Flat file written to pizzaFlatFile.txt");
+
+        // Sending flat file data to RabbitMQ
         ConnectionFactory factory = new ConnectionFactory();
         factory.setHost("localhost");
+
         try (Connection connection = factory.newConnection();
              Channel channel = connection.createChannel()) {
-            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
-            String message = "Hello Pizza Shop!";
-            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
-            System.out.println(" [x] Sent '" + message + "'");
 
+            //publishing the flat file data bytes to rabbitmq queue that was declared
+            channel.queueDeclare(QUEUE_NAME, false, false, false, null);
+            channel.basicPublish("", QUEUE_NAME, null, message.getBytes());
+
+            System.out.println("Sent flat file data: " + message);
         }
     }
 }
